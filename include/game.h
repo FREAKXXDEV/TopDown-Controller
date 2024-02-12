@@ -25,7 +25,6 @@ private:
 	sf::View view;
 
 	sf::Texture rockTexture;
-	sf::Texture playerTexture;
 
 	std::vector<Tile*> visibleObjects;
 	std::vector<Tile*> collidableObjects;
