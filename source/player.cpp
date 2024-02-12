@@ -4,28 +4,40 @@ Player::Player(const float SIZE)
 	: Tile(SIZE) 
 	, direction() 
 	, SPEED(600.f) 
-	, animations() {
+	, animations()
+	, status("down_idle")
+	, frameIndex()
+	, ANIMATION_SPEED(5.2f) {
 
-	importAnimations();
-	setTexture(animations["down_idle"][0]);
+	importAssets();
+	rect.setTexture(&animations[status][(int)frameIndex]);
 }
 
 void Player::update(float deltaTime) {
 	getInput();
 	move(deltaTime);
+	animate(deltaTime);
 }
 
 void Player::getInput() {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) 
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
 		direction.x = -1;
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) 
+		status = "left";
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
 		direction.x = 1;
+		status = "right";
+	}
 	else direction.x = 0;
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) 
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
 		direction.y = -1;
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) 
+		status = "up";
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
 		direction.y = 1;
+		status = "down";
+	}
 	else direction.y = 0;
 }
 
@@ -38,20 +50,34 @@ void Player::move(float deltaTime){
 	rect.setPosition(hitbox.getPosition() - rect.getSize() / 2.0f);
 }
 
-void Player::importAnimations() {
-	std::string rootPath = "graphics/player/";
-	std::vector<std::string> directories{
-		"down", "left", "right", "up",
-		"down_idle", "left_idle", "right_idle", "up_idle"
+void Player::importAssets() {
+	std::string rootDirectory = "graphics\\player\\";
+	std::vector<std::string> subDirectories{
+		"up_idle", "down_idle", "left_idle", "right_idle",
+		"up", "down", "left", "right"
 	};
-	
-	std::vector<sf::Texture> textures;
-	for (const auto &directory : directories) {
-		for (const auto &entry : std::filesystem::directory_iterator(rootPath + directory)) {
+
+	for (const auto &subDir : subDirectories) {
+		std::vector<sf::Texture> textures;
+		for (const auto &entry : std::filesystem::directory_iterator(rootDirectory + subDir)) {
 			sf::Texture texture;
 			texture.loadFromFile(entry.path().string());
 			textures.push_back(texture);
 		}
-		animations[directory] = textures;
+
+		animations[subDir] = textures;
 	}
+}
+
+void Player::animate(float deltaTime) {
+	if (direction.x == 0.0f && direction.y == 0.0f) {
+		if (status.find("idle") == std::string::npos)
+			status += "_idle";
+	}
+
+	frameIndex += ANIMATION_SPEED * deltaTime;
+	if (frameIndex > animations[status].size())
+		frameIndex = 0.0f;
+
+	rect.setTexture(&animations[status][(int)frameIndex]);
 }
