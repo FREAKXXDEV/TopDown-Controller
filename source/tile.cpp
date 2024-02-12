@@ -2,7 +2,7 @@
 
 Tile::Tile(const float TILE_SIZE)
 	: rect(sf::Vector2f(TILE_SIZE, TILE_SIZE))
-	, hitbox(sf::Vector2f(TILE_SIZE, TILE_SIZE / 1.5f)) {
+	, hitbox(sf::Vector2f(TILE_SIZE, TILE_SIZE / 1.125f)) {
 	
 	hitbox.setOrigin(hitbox.getSize() / 2.0f);
 }
