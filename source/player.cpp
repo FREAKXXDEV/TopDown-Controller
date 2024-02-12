@@ -7,7 +7,7 @@ Player::Player(const float SIZE)
 	, animations()
 	, status("down_idle")
 	, frameIndex()
-	, ANIMATION_SPEED(5.2f) {
+	, ANIMATION_SPEED(54.8f) {
 
 	importAssets();
 	rect.setTexture(&animations[status][(int)frameIndex]);
