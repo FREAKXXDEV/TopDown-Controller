@@ -52,7 +52,7 @@ void Player::move(float deltaTime){
 
 void Player::importAssets() {
 	std::string rootDirectory = "graphics\\player\\";
-	std::vector<std::string> subDirectories{
+	std::vector<std::string> subDirectories {
 		"up_idle", "down_idle", "left_idle", "right_idle",
 		"up", "down", "left", "right"
 	};

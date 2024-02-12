@@ -12,13 +12,23 @@ Game::Game()
 	setupLevel();
 }
 
-void Game::run() {
+void Game::run(const float framesPerSecond) {
 	sf::Clock clock;
-
-	while (window.isOpen()) {
+	sf::Time timeSinceLastUpdate = sf::Time::Zero;
+	sf::Time TimePerFrame = sf::seconds(1.f / framesPerSecond);
+	while (window.isOpen())
+	{
 		processEvents();
-		update(clock.restart());
-		render();
+		bool canRender = false;
+		timeSinceLastUpdate += clock.restart();
+		while (timeSinceLastUpdate > TimePerFrame)
+		{
+			timeSinceLastUpdate -= TimePerFrame;
+			canRender = true;
+			update(TimePerFrame);
+		}
+		if (canRender)
+			render();
 	}
 }
 
