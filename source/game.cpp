@@ -70,8 +70,8 @@ void Game::render() {
 void Game::setupLevel() {
 	for (int i = 0; i < COLUMNS; ++i) {
 		for (int j = 0; j < ROWS; ++j) {
-			float x = static_cast<float>(j) * TILE_SIZE;
-			float y = static_cast<float>(i) * TILE_SIZE;
+			float x = (float)j * TILE_SIZE;
+			float y = (float)i * TILE_SIZE;
 
 			if (map[i][j] == 'x') {
 				Tile *tile = new Tile(TILE_SIZE);
