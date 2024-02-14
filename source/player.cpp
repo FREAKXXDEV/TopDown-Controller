@@ -3,11 +3,11 @@
 Player::Player(const float SIZE)
 	: Tile(SIZE) 
 	, direction() 
-	, SPEED(600.f) 
+	, SPEED(400.f) 
 	, animations()
 	, status("down_idle")
 	, frameIndex()
-	, ANIMATION_SPEED(54.8f) {
+	, ANIMATION_SPEED(4.8f) {
 
 	importAssets();
 	rect.setTexture(&animations[status][(int)frameIndex]);
@@ -52,10 +52,11 @@ void Player::move(float deltaTime){
 
 void Player::importAssets() {
 	std::string rootDirectory = "graphics\\player\\";
-	std::vector<std::string> subDirectories {
-		"up_idle", "down_idle", "left_idle", "right_idle",
-		"up", "down", "left", "right"
-	};
+	std::vector<std::string> subDirectories;
+	for (const auto &entry : std::filesystem::directory_iterator(rootDirectory)) {
+		if (entry.is_directory())
+			subDirectories.push_back(entry.path().filename().string());
+	}
 
 	for (const auto &subDir : subDirectories) {
 		std::vector<sf::Texture> textures;
