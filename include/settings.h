@@ -3,7 +3,7 @@
 const unsigned int WINDOW_WIDTH = 840;
 const unsigned int WINDOW_HEIGHT = 520;
 
-const unsigned int TILE_SIZE = 64;
+const float TILE_SIZE = 64;
 
 const unsigned int ROWS = 20;
 const unsigned int COLUMNS = 20;

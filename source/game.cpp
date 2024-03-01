@@ -7,8 +7,7 @@ Game::Game()
 	, collidableObjects{}
 	, player(new Player(TILE_SIZE)) {
 	
-	rockTexture.loadFromFile("graphics/objects/rock.png");
-
+	rockTexture.loadFromFile("graphics/tilesets/rock.png"); 
 	setupLevel();
 }
 
@@ -51,12 +50,12 @@ void Game::update(sf::Time time) {
 	float deltaTime = time.asSeconds();
 
 	player->update(deltaTime);
-	for (auto it = collidableObjects.begin(); it != collidableObjects.end(); ++it) {
-		Collider playerCollider = player->getCollider();
-		Collider tileCollider = (*it)->getCollider();
+	for (const auto& obj : collidableObjects) {
+		Collider&& playerCollider = std::move(player->getCollider());
+		Collider&& tileCollider = std::move(obj->getCollider());
 		playerCollider.checkCollision(tileCollider);
 	}
-		
+
 	view.setCenter(player->getPosition());
 	window.setView(view);
 
@@ -65,30 +64,29 @@ void Game::update(sf::Time time) {
 
 void Game::render() {
 	window.clear();
-
-	for (auto it = visibleObjects.begin(); it != visibleObjects.end(); ++it)
-		(*it)->draw(window);
+	for (const auto& object : visibleObjects) 
+		object->draw(window);
 	window.display();
 }
 
 void Game::setupLevel() {
-	for (int i = 0; i < COLUMNS; ++i) {
-		for (int j = 0; j < ROWS; ++j) {
-			float x = static_cast<float>(j) * TILE_SIZE;
-			float y = static_cast<float>(i) * TILE_SIZE;
+	for (int col = 0; col < COLUMNS; ++col) {
+		for (int row = 0; row < ROWS; ++row) {
+			float tileX = (float)row * TILE_SIZE;
+			float tileY = (float)col * TILE_SIZE;
 
-			if (map[i][j] == 'x') {
-				Tile *tile = new Tile(TILE_SIZE);
-				tile->setPosition(x, y);
-				tile->setTexture(rockTexture);
-				visibleObjects.push_back(tile);
-				collidableObjects.push_back(tile);
+			if (map[col][row] == 'x') {
+				Tile *rockTile = new Tile(TILE_SIZE);
+				rockTile->setPosition(tileX, tileY);
+				rockTile->setTexture(rockTexture);
+				visibleObjects.push_back(rockTile);  
+				collidableObjects.push_back(rockTile);  
 			}
-			else if (map[i][j] == 'p') {
-				Player *player = new Player(TILE_SIZE);
-				player->setPosition(x, y);
-				visibleObjects.push_back(player);
-				this->player = player;
+			else if (map[col][row] == 'p') {
+				Player *playerObj = new Player(TILE_SIZE);
+				playerObj->setPosition(tileX, tileY);
+				visibleObjects.push_back(playerObj); 
+				this->player = playerObj;
 			}
 		}
 	}

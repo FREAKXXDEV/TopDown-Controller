@@ -20,25 +20,35 @@ void Player::update(float deltaTime) {
 }
 
 void Player::getInput() {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-		direction.x = -1;
-		status = "left";
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-		direction.x = 1;
-		status = "right";
-	}
-	else direction.x = 0;
+	bool left = sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left);
+	bool right = sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right);
+	bool up = sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up);
+	bool down = sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down);
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-		direction.y = -1;
-		status = "up";
+	/*
+	* the ^ operator only returns true if one of the two values provided is true
+	* if none of them or both of them are true at the same time it returns false
+	*/
+
+	/*
+	* the ? operator is a single line if else statement
+	* if the given value before the ? is true then the the code next to the ? will be executed
+	* the else condition is to be separated with a : which will execute if the given value is false
+	*/
+
+	if (!(left ^ right))
+		direction.x = 0.f;
+	else {
+		direction.x = left ? -1.f : 1.f;
+		status = left ? "left" : "right";
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-		direction.y = 1;
-		status = "down";
+
+	if (!(up ^ down))
+		direction.y = 0.f;
+	else if (up ^ down) {
+		direction.y = up ? -1.f : 1.f; 
+		status = up ? "up" : "down";
 	}
-	else direction.y = 0;
 }
 
 void Player::move(float deltaTime){
