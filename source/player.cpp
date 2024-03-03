@@ -52,8 +52,15 @@ void Player::getInput() {
 }
 
 void Player::move(float deltaTime){
-	if (direction.x != 0.0f && direction.y != 0.0f)
-		direction /= sqrt(2.0f);
+	if (direction.x != 0.0f && direction.y != 0.0f) {
+		/*
+		* A² + B² = C²
+		* Common Pythagoras Theorem W 
+		*/
+
+		float normalizedLength = sqrtf(powf(direction.x, 2) + powf(direction.y, 2));
+		direction /= normalizedLength;
+	}
 
 	sf::Vector2f velocity(direction * SPEED * deltaTime);
 	hitbox.move(velocity);

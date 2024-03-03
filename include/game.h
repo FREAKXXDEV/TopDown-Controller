@@ -15,10 +15,15 @@ private:
 	void update(sf::Time time);
 	void render();
 	void setupLevel();
-	void sortRenderingOrder();
+
 	struct TilePositionComparator {
-		bool operator()(Tile *tile1, Tile *tile2);
+		bool operator()(Tile *tile1, Tile *tile2) {
+			return tile1->getPosition().y < tile2->getPosition().y;
+		}
 	};
+	void sortRenderingOrder() {
+		std::sort(visibleObjects.begin(), visibleObjects.end(), TilePositionComparator());
+	}
 
 private:
 	sf::RenderWindow window;

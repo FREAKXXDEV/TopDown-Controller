@@ -7,7 +7,7 @@ Game::Game()
 	, collidableObjects{}
 	, player(new Player(TILE_SIZE)) {
 	
-	rockTexture.loadFromFile("graphics/tilesets/rock.png"); 
+	rockTexture.loadFromFile("graphics/objects/rock.png"); 
 	setupLevel();
 }
 
@@ -70,32 +70,25 @@ void Game::render() {
 }
 
 void Game::setupLevel() {
-	for (int col = 0; col < COLUMNS; ++col) {
-		for (int row = 0; row < ROWS; ++row) {
+	for (size_t row = 0; row < map.size(); ++row) {
+		for (size_t col = 0; col < map[row].length(); ++col) {
 			float tileX = (float)row * TILE_SIZE;
 			float tileY = (float)col * TILE_SIZE;
 
-			if (map[col][row] == 'x') {
+			if (map[col][row] == 'X') {
 				Tile *rockTile = new Tile(TILE_SIZE);
 				rockTile->setPosition(tileX, tileY);
 				rockTile->setTexture(rockTexture);
-				visibleObjects.push_back(rockTile);  
-				collidableObjects.push_back(rockTile);  
+				visibleObjects.push_back(rockTile);
+				collidableObjects.push_back(rockTile);
 			}
-			else if (map[col][row] == 'p') {
+			else if (map[col][row] == 'P') {
 				Player *playerObj = new Player(TILE_SIZE);
 				playerObj->setPosition(tileX, tileY);
-				visibleObjects.push_back(playerObj); 
+				visibleObjects.push_back(playerObj);
 				this->player = playerObj;
 			}
 		}
 	}
 }
 
-void Game::sortRenderingOrder() {
-	std::sort(visibleObjects.begin(), visibleObjects.end(), TilePositionComparator());
-}
-
-bool Game::TilePositionComparator::operator()(Tile *tile1, Tile *tile2) {
-	return tile1->getPosition().y < tile2->getPosition().y;
-}
