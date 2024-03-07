@@ -71,9 +71,9 @@ void Game::render() {
 
 void Game::setupLevel() {
 	for (size_t row = 0; row < map.size(); ++row) {
-		for (size_t col = 0; col < map[row].length(); ++col) {
-			float tileX = (float)row * TILE_SIZE;
-			float tileY = (float)col * TILE_SIZE;
+		for (size_t col = 0; col < map[row].size(); ++col) {
+			float tileX = (float)col * TILE_SIZE;
+			float tileY = (float)row * TILE_SIZE;
 
 			if (map[col][row] == 'X') {
 				Tile *rockTile = new Tile(TILE_SIZE);
@@ -91,4 +91,3 @@ void Game::setupLevel() {
 		}
 	}
 }
-
