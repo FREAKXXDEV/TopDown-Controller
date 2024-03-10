@@ -70,23 +70,23 @@ void Game::render() {
 }
 
 void Game::setupLevel() {
-	for (size_t row = 0; row < map.size(); ++row) {
-		for (size_t col = 0; col < map[row].size(); ++col) {
+	for (size_t col = 0; col < map[0].size(); ++col) {
+		for (size_t row = 0; row < map.size(); ++row) {
 			float tileX = (float)col * TILE_SIZE;
 			float tileY = (float)row * TILE_SIZE;
 
-			if (map[col][row] == 'X') {
+			if (map[row][col] == 'X') {
 				Tile *rockTile = new Tile(TILE_SIZE);
 				rockTile->setPosition(tileX, tileY);
 				rockTile->setTexture(rockTexture);
 				visibleObjects.push_back(rockTile);
 				collidableObjects.push_back(rockTile);
 			}
-			else if (map[col][row] == 'P') {
-				Player *playerObj = new Player(TILE_SIZE);
-				playerObj->setPosition(tileX, tileY);
-				visibleObjects.push_back(playerObj);
-				this->player = playerObj;
+			else if (map[row][col] == 'P') {
+				Player *player = new Player(TILE_SIZE);
+				player->setPosition(tileX, tileY);
+				visibleObjects.push_back(player);
+				this->player = player;
 			}
 		}
 	}

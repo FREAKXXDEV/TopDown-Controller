@@ -1,10 +1,10 @@
 #pragma once
 #include <array>
 
-const unsigned int WINDOW_WIDTH = 840;
-const unsigned int WINDOW_HEIGHT = 520;
-
 const float TILE_SIZE = 64;
+const unsigned int WINDOW_WIDTH = (unsigned int)TILE_SIZE * 14;
+const unsigned int WINDOW_HEIGHT = (unsigned int)TILE_SIZE * 8;
+
 const std::array<const std::array<const char, 20>, 20> map = {{
     {{ 'X','X','X','X','X','X','X','X','X','X','X','X','X','X','X','X','X','X','X','X' }},
     {{ 'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X' }},
@@ -27,6 +27,3 @@ const std::array<const std::array<const char, 20>, 20> map = {{
     {{ 'X',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','X' }},
     {{ 'X','X','X','X','X','X','X','X','X','X','X','X','X','X','X','X','X','X','X','X' }}
 }};
-
-const unsigned int cameraXAxis = 80;
-const unsigned int cameraYAxis = 40;
