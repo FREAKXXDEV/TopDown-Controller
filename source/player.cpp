@@ -68,7 +68,8 @@ void Player::move(float deltaTime){
 }
 
 void Player::importAssets() {
-	std::string rootDirectory = "graphics\\player\\";
+	std::string dirPath = "graphics\\player\\";
+	/*
 	std::vector<std::string> subDirectories;
 	for (const auto &entry : std::filesystem::directory_iterator(rootDirectory)) {
 		if (entry.is_directory())
@@ -84,6 +85,36 @@ void Player::importAssets() {
 		}
 
 		animations[subDir] = textures;
+	}
+	*/
+
+	/*
+	for (const auto &subDir : std::filesystem::directory_iterator(dirPath)) {
+		if (!subDir.is_directory())	
+			continue;
+
+		const std::string &subDirName = subDir.path().filename().string();
+		for (const auto &entry : std::filesystem::directory_iterator(dirPath + subDirName)) {
+			const std::string &entryPath = entry.path().string();
+			sf::Texture texture;
+			if (!texture.loadFromFile(entryPath))
+				continue;
+
+			animations[subDirName].push_back(texture);
+		}
+	}
+	*/
+
+	for (const auto &entry : std::filesystem::recursive_directory_iterator(dirPath)) {
+		if (!entry.is_regular_file())
+			continue;
+
+		std::string subDir = entry.path().parent_path().filename().string();
+		sf::Texture texture;
+		if (!texture.loadFromFile(entry.path().string()))
+			continue;
+
+		animations[subDir].push_back(std::move(texture));
 	}
 }
 
